@@ -23,7 +23,8 @@ function add(x,y,onResult){
     setTimeout(function(){
         if (!x || !y) {
             var e =  Error("Invalid arguments");
-            return onResult(e);
+            onResult(e);
+            return;
         }
         var result = x + y;
         console.log("[Provider] returning result");
@@ -43,16 +44,6 @@ function addClient(x,y){
         console.log("[Consumer] result = ", result);
     });
 }
-
-
-
-
-
-
-
-
-
-
 
 module.exports.addSyncClient = addSyncClient;
 module.exports.addClient = addClient;
