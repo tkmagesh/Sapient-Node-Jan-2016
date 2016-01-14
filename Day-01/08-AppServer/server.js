@@ -2,6 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var path = require('path');
 var url = require('url');
+var qs = require('querystring');
 var calculator = require('./calculator');
 
 var staticResourceExtns = ['.html','.css','.js','.jpg','.png','.ico','.json'];
@@ -30,7 +31,7 @@ var server = http.createServer(function(req, res){
             res.end();
         });
 
-    } else if (urlObj.pathname === '/calculator'){/* /calculator */
+    } else if (urlObj.pathname === '/calculator' && req.method === 'GET'){
         var data = urlObj.query,
             n1 = parseInt(data.n1, 10),
             n2 = parseInt(data.n2, 10),
@@ -38,6 +39,21 @@ var server = http.createServer(function(req, res){
         var result = calculator[op](n1,n2);
         res.write(result.toString());
         res.end();
+    } else if (urlObj.pathname === '/calculator' && req.method === 'POST'){
+        var dataAsString = '';
+        req.on('data', function(chunk){
+            dataAsString += chunk;
+        });
+        req.on('end', function(){
+            var data = qs.parse(dataAsString),
+                n1 = parseInt(data.n1, 10),
+                n2 = parseInt(data.n2, 10),
+                op = data.op;
+            var result = calculator[op](n1,n2);
+            res.write(result.toString());
+            res.end();
+        })
+
     } else {
         console.log('unknown resource - ', resourceName);
         res.statusCode = 404;
