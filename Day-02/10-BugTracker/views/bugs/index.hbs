@@ -1,0 +1,27 @@
+<style>
+    .closed{
+        color : red;
+        text-decoration : line-through;
+        font-style : italic;
+        font-weight : bold;
+    }
+</style>
+<h1>Bug Tracker</h1>
+<hr>
+<ol>
+   {{#each bugs}}
+    <li>
+        {{#if this.isClosed}}
+            <span class="closed">
+        {{else}}
+            <span>
+        {{/if}}
+            {{this.name}}
+            </span>
+            <span>
+                <a href="/bugs/toggle/{{this.id}}"> X </a>
+            </span>
+        </li>
+   {{/each}}
+</ol>
+<a href="/bugs/new">Create New</a>
