@@ -36,4 +36,56 @@ router.get('/toggle/:id', function(req, res, next){
     res.redirect('/bugs');
 });
 
+router.get('/api', function(req, res, next){
+    res.status(200).json({bugs : list});
+});
+router.get('/api/:id', function(req, res, next){
+    var bugId = parseInt(req.params.id,10);
+    var bug = list.filter(function(b){
+        return b.id === bugId;
+    })[0];
+    if (bug){
+        res.status(200).json(bug);
+    } else {
+        res.status(404).end();
+    }
+});
+
+router.post('/api', function(req, res, next){
+    var newId = list.reduce(function(result, bug){
+         return result > bug.id ? result : bug.id;
+     },0) + 1;
+     var bug = {
+         id : newId,
+         name : req.body.name,
+         isClosed : req.body.isClosed || false
+     };
+     list.push(bug);
+    res.status(201).json(bug);
+});
+
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
